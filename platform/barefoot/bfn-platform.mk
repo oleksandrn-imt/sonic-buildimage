@@ -1,5 +1,5 @@
-BFN_PLATFORM = bfnplatform_9.0.0.cc6ccbe_pr_deb9.deb
-$(BFN_PLATFORM)_URL = "https://github.com/barefootnetworks/sonic-release-pkgs/raw/rel_9_0/bfnplatform_9.0.0.cc6ccbe_pr_deb9.deb"
+BFN_PLATFORM = bfnplatform_1.0.0_amd64.deb
+$(BFN_PLATFORM)_URL = "http://192.168.157.83/yuriih/barefoot/$(BFN_PLATFORM)"
 
 SONIC_ONLINE_DEBS += $(BFN_PLATFORM)
 $(BFN_SAI_DEV)_DEPENDS += $(BFN_PLATFORM)

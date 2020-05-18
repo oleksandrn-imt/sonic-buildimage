@@ -33,7 +33,13 @@ RUN apt-get purge -y python-pip && \
     apt-get autoremove -y       && \
     rm -rf /debs                   \
            /python-wheels          \
-           ~/.cache
+           ~/.cache                \
+           /var/lib/apt/lists/*    \
+           /usr/share/doc/*        \
+           /usr/share/locale/*     \
+           /usr/share/man/*        \
+           /var/cache/*            \
+           /tmp/*
 
 COPY ["start.sh", "/usr/bin/"]
 COPY ["supervisord.conf", "/etc/supervisor/conf.d/"]

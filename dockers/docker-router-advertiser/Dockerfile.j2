@@ -19,10 +19,18 @@ RUN apt-get update
 {%- endif %}
 
 # Clean up
-RUN apt-get clean -y        && \
-    apt-get autoclean -y    && \
-    apt-get autoremove -y   && \
-    rm -rf /debs
+RUN apt-get clean -y         && \
+    apt-get autoclean -y     && \
+    apt-get autoremove -y    && \
+    rm -rf /debs                \
+           /python-wheels       \
+           ~/.cache             \
+           /var/lib/apt/lists/* \
+           /usr/share/doc/*     \
+           /usr/share/locale/*  \
+           /usr/share/man/*     \
+           /var/cache/*         \
+           /tmp/*
 
 COPY ["start.sh", "/usr/bin/"]
 COPY ["docker-router-advertiser.supervisord.conf", "/etc/supervisor/conf.d/"]

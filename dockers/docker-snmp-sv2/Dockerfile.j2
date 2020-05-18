@@ -81,7 +81,15 @@ RUN apt-get -y purge     \
     apt-get autoclean -y    && \
     apt-get autoremove -y --purge && \
     find / | grep -E "__pycache__" | xargs rm -rf && \
-    rm -rf /debs /python-wheels ~/.cache
+    rm -rf /debs                \
+           /python-wheels       \
+           ~/.cache             \
+           /var/lib/apt/lists/* \
+           /usr/share/doc/*     \
+           /usr/share/locale/*  \
+           /usr/share/man/*     \
+           /var/cache/*         \
+           /tmp/*
 
 COPY ["start.sh", "/usr/bin/"]
 COPY ["supervisord.conf", "/etc/supervisor/conf.d/"]

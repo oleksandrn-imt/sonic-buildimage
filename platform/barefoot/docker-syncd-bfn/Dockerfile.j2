@@ -32,7 +32,14 @@ COPY ["supervisord.conf", "/etc/supervisor/conf.d/"]
 
 ## Clean up
 RUN apt-get clean -y; apt-get autoclean -y; apt-get autoremove -y
-RUN rm -rf /debs
+RUN rm -rf /debs                \
+           ~/.cache             \
+           /var/lib/apt/lists/* \
+           /usr/share/doc/*     \
+           /usr/share/locale/*  \
+           /usr/share/man/*     \
+           /var/cache/*         \
+           /tmp/*
 
 ENTRYPOINT ["/usr/bin/supervisord"]
 

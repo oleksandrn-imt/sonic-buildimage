@@ -58,10 +58,18 @@ RUN apt-get remove -y gcc-6
 {%- endif %}
 
 ## Clean up
-RUN apt-get clean -y        && \
-    apt-get autoclean -y    && \
-    apt-get autoremove -y   && \
-    rm -rf /debs
+RUN apt-get clean -y         && \
+    apt-get autoclean -y     && \
+    apt-get autoremove -y    && \
+    rm -rf /debs                \
+           ~/.cache             \
+           /python-wheels       \
+           /var/lib/apt/lists/* \
+           /usr/share/doc/*     \
+           /usr/share/locale/*  \
+           /usr/share/man/*     \
+           /var/cache/*         \
+           /tmp/*
 
 COPY ["files/arp_update", "/usr/bin"]
 COPY ["enable_counters.py", "/usr/bin"]

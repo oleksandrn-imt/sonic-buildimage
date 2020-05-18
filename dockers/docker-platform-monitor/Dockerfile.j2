@@ -45,14 +45,20 @@ RUN apt-get update &&   \
 {% endif %}
 
 # Clean up
-RUN apt-get purge -y           \
-        python-pip          && \
-    apt-get clean -y        && \
-    apt-get autoclean -y    && \
-    apt-get autoremove -y   && \
-    rm -rf /debs               \
-           /python-wheels      \
-           ~/.cache
+RUN apt-get purge -y            \
+        python-pip           && \
+    apt-get clean -y         && \
+    apt-get autoclean -y     && \
+    apt-get autoremove -y    && \
+    rm -rf /debs                \
+           /python-wheels       \
+           ~/.cache             \
+           /var/lib/apt/lists/* \
+           /usr/share/doc/*     \
+           /usr/share/locale/*  \
+           /usr/share/man/*     \
+           /var/cache/*         \
+           /tmp/*
 
 COPY ["docker_init.sh", "lm-sensors.sh", "/usr/bin/"]
 COPY ["docker-pmon.supervisord.conf.j2", "start.sh.j2", "/usr/share/sonic/templates/"]

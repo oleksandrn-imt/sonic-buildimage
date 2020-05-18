@@ -22,7 +22,15 @@ RUN apt-get update
 RUN apt-get clean -y         && \
     apt-get autoclean -y     && \
     apt-get autoremove -y    && \
-    rm -rf /debs
+    rm -rf /debs                \
+           /python-wheels       \
+           ~/.cache             \
+           /var/lib/apt/lists/* \
+           /usr/share/doc/*     \
+           /usr/share/locale/*  \
+           /usr/share/man/*     \
+           /var/cache/*         \
+           /tmp/*
 
 COPY ["docker_init.sh", "start.sh", "/usr/bin/"]
 COPY ["docker-dhcp-relay.supervisord.conf.j2", "wait_for_intf.sh.j2", "/usr/share/sonic/templates/"]

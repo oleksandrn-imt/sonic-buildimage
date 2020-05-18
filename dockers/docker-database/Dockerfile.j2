@@ -31,6 +31,13 @@ RUN apt-get clean -y                                  && \
              s/redis-server.sock/redis.sock/g;           \
              s/^client-output-buffer-limit pubsub [0-9]+mb [0-9]+mb [0-9]+/client-output-buffer-limit pubsub 0 0 0/ \
             ' /etc/redis/redis.conf
+RUN rm -rf /python-wheels       \
+           /usr/share/doc/*     \
+           /usr/share/locale/*  \
+           /usr/share/man/*     \
+           /var/lib/apt/lists/* \
+           /tmp/*               \
+           /var/cache/*
 
 COPY ["supervisord.conf", "/etc/supervisor/conf.d/"]
 

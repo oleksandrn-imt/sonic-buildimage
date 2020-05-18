@@ -287,7 +287,7 @@ create_demo_msdos_partition()
     # Create new partition
     echo "Creating new partition ${blk_dev}$demo_part ..."
     parted -s --align optimal $blk_dev unit s \
-      mkpart primary $demo_part_start $demo_part_end set $demo_part boot on || {
+      "mkpart primary ext4 ${demo_part_start}s -1s" || {
         echo "ERROR: Problems creating msdos partition $demo_part on: $blk_dev"
         exit 1
     }
@@ -421,6 +421,28 @@ demo_install_uefi_grub()
 
 image_dir="image-$image_version"
 
+# Merge system /boot directory with the target root filesystem /boot directory
+demo_merge_boot_dirs()
+{
+    echo "Merge system /boot directory with the target root filesystem /boot directory..."
+    mnt_dir="$1"
+    boot_dev=$onie_dev
+
+    # Unmount boot partition.
+    umount $boot_dev 2>/dev/null
+
+    tar cz -C $mnt_dir/$image_dir boot > /tmp/boot-fs.tar.gz
+    rm -rf $mnt_dir/$image_dir/boot
+    mkdir $mnt_dir/$image_dir/boot
+    until mount -t ext2 "${boot_dev}" $mnt_dir/$image_dir/boot; do sleep 1; done
+    tar xz -C $mnt_dir/$image_dir < /tmp/boot-fs.tar.gz
+    rm /tmp/boot-fs.tar.gz
+
+    # Re-mount boot partition back.
+    until umount $mnt_dir/$image_dir/boot ; do sleep 1 ; done
+    mount -t ext2 "${boot_dev}" /boot 2>/dev/null
+}
+
 if [ "$install_env" = "onie" ]; then
     eval $create_demo_partition $blk_dev
     demo_dev=$(echo $blk_dev | sed -e 's/\(mmcblk[0-9]\)/\1p/')$demo_part
@@ -507,18 +529,19 @@ if [ "$install_env" = "onie" ]; then
 
     # Store installation log in target file system
     rm -f $onie_initrd_tmp/tmp/onie-support*.tar.bz2
-    ${onie_bin} onie-support /tmp
+    ${onie_bin} onie-support /tmp &>/dev/null
     mv $onie_initrd_tmp/tmp/onie-support*.tar.bz2 $demo_mnt/$image_dir/
 
     if [ "$firmware" = "uefi" ] ; then
         demo_install_uefi_grub "$demo_mnt" "$blk_dev"
+    elif [ "$onie_partition_type" = "msdos" ] ; then
+        demo_merge_boot_dirs "$demo_mnt" "$blk_dev"
     else
         demo_install_grub "$demo_mnt" "$blk_dev"
     fi
 fi
 
 # Create a minimal grub.cfg that allows for:
-#   - configure the serial console
 #   - allows for grub-reboot to work
 #   - a menu entry for the DEMO OS
 #   - menu entries for ONIE
@@ -593,6 +616,7 @@ else
 fi
 
 cat <<EOF >> $grub_cfg
+### BEGIN /etc/grub.d/10_linux ###
 menuentry '$demo_grub_entry' {
         search --no-floppy --label --set=root $demo_volume_label
         echo    'Loading $demo_volume_label $demo_type kernel ...'
@@ -607,13 +631,30 @@ menuentry '$demo_grub_entry' {
         echo    'Loading $demo_volume_label $demo_type initial ramdisk ...'
         initrd  /$image_dir/boot/initrd.img-4.9.0-9-2-amd64
 }
+### END /etc/grub.d/10_linux ###
+
 EOF
 
 if [ "$install_env" = "onie" ]; then
     # Add menu entries for ONIE -- use the grub fragment provided by the
     # ONIE distribution.
-    $onie_root_dir/grub.d/50_onie_grub >> $grub_cfg
-    mkdir -p $onie_initrd_tmp/$demo_mnt/grub
+    if [ -f /boot/50_onie_grub_imt ] ; then
+        echo "### BEGIN /etc/grub.d/50_onie_grub ###" >> $grub_cfg
+        if [ -f /boot/onie/grub/grub-machine.cfg ] ; then
+            cat /boot/onie/grub/grub-machine.cfg >> $grub_cfg
+        else
+            echo "## Begin grub-machine.cfg" > /boot/onie/grub/grub-machine.cfg
+            sed -e 's/\(.*\)=\(.*$\)/\1=\2\nexport \1/' /etc/machine.conf >> /boot/onie/grub/grub-machine.cfg
+            echo "## End grub-machine.cfg" >> /boot/onie/grub/grub-machine.cfg
+            cat /boot/onie/grub/grub-machine.cfg >> $grub_cfg
+        fi
+        cat /boot/50_onie_grub_imt >> $grub_cfg
+        echo "### END /etc/grub.d/50_onie_grub ###" >> $grub_cfg
+        rm /boot/50_onie_grub_imt
+    else
+        $onie_root_dir/grub.d/50_onie_grub >> $grub_cfg
+        mkdir -p $onie_initrd_tmp/$demo_mnt/grub
+    fi
 else
 cat <<EOF >> $grub_cfg
 $old_sonic_menuentry
@@ -625,7 +666,10 @@ if [ "$install_env" = "build" ]; then
     cp $grub_cfg $demo_mnt/grub.cfg
     umount $demo_mnt
 else
-    cp $grub_cfg $onie_initrd_tmp/$demo_mnt/grub/grub.cfg
+    # Save GRUB recover cfg and replace the existing one with just generated.
+    cp /boot/grub/grub.cfg /boot/grub/grub.cfg.recover
+    cp -a $grub_cfg /boot/grub/grub.cfg
+    cp -r /boot/* $demo_mnt/$image_dir/boot/
 fi
 
 cd /
