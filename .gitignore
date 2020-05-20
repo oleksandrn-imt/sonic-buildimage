@@ -137,3 +137,15 @@ src/sonic-daemon-base/sonic_daemon_base.egg-info
 # Misc. files
 files/initramfs-tools/arista-convertfs
 files/initramfs-tools/union-mount
+
+# Barefoot platform build artifacts
+platform/barefoot/*modules*/debian/*platform*
+platform/barefoot/*modules*/debian/.debhelper
+platform/barefoot/*modules*/debian/files
+platform/barefoot/*modules*/debian/bfn-modules*
+platform/barefoot/*modules*/modules/*.ko*
+platform/barefoot/*modules*/modules/*.mod*
+platform/barefoot/*modules*/modules/*.o*
+platform/barefoot/*modules*/modules/Module*
+platform/barefoot/*modules*/modules/modules*
+platform/barefoot/*modules*/modules/.tmp_versions

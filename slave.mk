@@ -608,6 +608,8 @@ $(addprefix $(TARGET_PATH)/, $(SONIC_INSTALLERS)) : $(TARGET_PATH)/% : \
                 $(SONIC_DEVICE_DATA) \
                 $(PYTHON_CLICK) \
                 $(IFUPDOWN2) \
+                $(IMT_BK_MODULES) \
+                $(IMT_BK_UTILS) \
                 $(LIBPAM_TACPLUS) \
                 $(LIBNSS_TACPLUS)) \
         $$(addprefix $(TARGET_PATH)/,$$($$*_DOCKERS)) \
