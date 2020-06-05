@@ -6,7 +6,8 @@
 	url = https://github.com/Azure/sonic-linux-kernel
 [submodule "sonic-sairedis"]
 	path = src/sonic-sairedis
-	url = https://github.com/Azure/sonic-sairedis
+	url = https://github.com/InterfaceMasters/sonic-sairedis.git
+	branch = imt-bf-sde-9.0.0
 [submodule "sonic-swss"]
 	path = src/sonic-swss
 	url = https://github.com/Azure/sonic-swss
