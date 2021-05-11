@@ -621,6 +621,8 @@ $(addprefix $(TARGET_PATH)/, $(SONIC_INSTALLERS)) : $(TARGET_PATH)/% : \
                 $(PYTHON_CLICK) \
                 $(IFUPDOWN2) \
                 $(KDUMP_TOOLS) \
+                $(IMT_BK_MODULES) \
+                $(IMT_BK_UTILS) \
                 $(LIBPAM_TACPLUS) \
                 $(LIBNSS_TACPLUS) \
                 $(MONIT)) \

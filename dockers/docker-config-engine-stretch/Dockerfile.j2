@@ -46,4 +46,12 @@ RUN apt-get purge -y               \
     apt-get clean -y            && \
     apt-get autoclean -y        && \
     apt-get autoremove -y       && \
-    rm -rf /debs /python-wheels
+    rm -rf /debs                   \
+           /python-wheels          \
+           ~/.cache                \
+           /usr/share/doc/*        \
+           /usr/share/locale/*     \
+           /usr/share/man/*        \
+           /var/lib/apt/lists/*    \
+           /tmp/*                  \
+           /var/cache/*
