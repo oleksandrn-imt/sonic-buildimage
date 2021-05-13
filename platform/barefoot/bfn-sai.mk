@@ -1,5 +1,5 @@
-BFN_SAI = bfnsdk_9.1.0.fddc672_deb9.deb
-$(BFN_SAI)_URL = "https://github.com/barefootnetworks/sonic-release-pkgs/raw/rel_9_1/$(BFN_SAI)"
+BFN_SAI = bfnsdk_1.0.0_amd64.deb
+$(BFN_SAI)_URL = "https://github.com/InterfaceMasters/sonic-release-pkgs/raw/imt-bf-sde-9.1.0/sonic-barefoot-pkgs/$(BFN_SAI)"
 
 $(BFN_SAI)_DEPENDS += $(LIBNL_GENL3_DEV)
 $(BFN_SAI)_RDEPENDS += $(LIBNL_GENL3)
