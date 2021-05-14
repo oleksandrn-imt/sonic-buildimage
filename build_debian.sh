@@ -105,6 +105,9 @@ mount
 trap_push 'sudo umount $FILESYSTEM_ROOT/proc || true'
 sudo LANG=C chroot $FILESYSTEM_ROOT mount proc /proc -t proc
 
+## Copy IMT specific ONIE GRUB menu entries configuration
+sudo cp files/image_config/platform/50_onie_grub_imt $FILESYSTEM_ROOT/boot/50_onie_grub_imt
+
 ## Pointing apt to public apt mirrors and getting latest packages, needed for latest security updates
 sudo cp files/apt/sources.list.$CONFIGURED_ARCH $FILESYSTEM_ROOT/etc/apt/sources.list
 sudo cp files/apt/apt.conf.d/{81norecommends,apt-{clean,gzip-indexes,no-languages},no-check-valid-until} $FILESYSTEM_ROOT/etc/apt/apt.conf.d/
@@ -203,7 +206,7 @@ sudo LANG=C chroot $FILESYSTEM_ROOT rm /tmp/docker.gpg
 sudo LANG=C chroot $FILESYSTEM_ROOT add-apt-repository \
                                     "deb [arch=$CONFIGURED_ARCH] https://download.docker.com/linux/debian stretch stable"
 sudo LANG=C chroot $FILESYSTEM_ROOT apt-get update
-sudo LANG=C chroot $FILESYSTEM_ROOT apt-get -y install docker-ce=${DOCKER_VERSION}
+sudo LANG=C chroot $FILESYSTEM_ROOT apt-get -y install docker-ce=${DOCKER_VERSION} docker-ce-cli=${DOCKER_VERSION}
 sudo LANG=C chroot $FILESYSTEM_ROOT apt-get -y remove software-properties-common gnupg2
 
 ## Add docker config drop-in to specify dockerd command line
@@ -277,7 +280,8 @@ sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y in
     cgroup-tools            \
     ipmitool                \
     ndisc6                  \
-    makedumpfile
+    makedumpfile            \
+    python-pip
 
 
 if [[ $CONFIGURED_ARCH == amd64 ]]; then
@@ -408,8 +412,10 @@ if [[ $CONFIGURED_ARCH == amd64 ]]; then
 fi
 
 ## docker-py is needed by Ansible docker module
-sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT easy_install pip
-sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install 'docker-py==1.6.0'
+sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install --upgrade 'pip<21'
+sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get purge -y python-pip
+
+sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install 'docker==4.3.1'
 ## Note: keep pip installed for maintainance purpose
 
 ## Get gcc and python dev pkgs
@@ -523,7 +529,8 @@ fi
 sudo LANG=C chroot $FILESYSTEM_ROOT apt-get -y autoremove
 sudo LANG=C chroot $FILESYSTEM_ROOT apt-get autoclean
 sudo LANG=C chroot $FILESYSTEM_ROOT apt-get clean
-sudo LANG=C chroot $FILESYSTEM_ROOT bash -c 'rm -rf /usr/share/doc/* /usr/share/locale/* /var/lib/apt/lists/* /tmp/*'
+sudo LANG=C chroot $FILESYSTEM_ROOT bash -c 'rm -rf /usr/share/doc/* /usr/share/locale/* /usr/share/lintian/* /usr/share/man/*'
+sudo LANG=C chroot $FILESYSTEM_ROOT bash -c 'rm -rf /var/cache/* /var/lib/apt/lists/* /tmp/* ~/.cache'
 
 ## Clean up proxy
 [ -n "$http_proxy" ] && sudo rm -f $FILESYSTEM_ROOT/etc/apt/apt.conf.d/01proxy
@@ -556,8 +563,8 @@ sudo mkdir -p $FILESYSTEM_ROOT/var/lib/docker
 sudo mksquashfs $FILESYSTEM_ROOT $FILESYSTEM_SQUASHFS -e boot -e var/lib/docker -e $PLATFORM_DIR
 
 ## Compress docker files
-pushd $FILESYSTEM_ROOT && sudo tar czf $OLDPWD/$FILESYSTEM_DOCKERFS -C ${DOCKERFS_PATH}var/lib/docker .; popd
+pushd $FILESYSTEM_ROOT && sudo env GZIP=-9 tar czf $OLDPWD/$FILESYSTEM_DOCKERFS -C ${DOCKERFS_PATH}var/lib/docker .; popd
 
 ## Compress together with /boot, /var/lib/docker and $PLATFORM_DIR as an installer payload zip file
-pushd $FILESYSTEM_ROOT && sudo zip $OLDPWD/$ONIE_INSTALLER_PAYLOAD -r boot/ $PLATFORM_DIR/; popd
-sudo zip -g $ONIE_INSTALLER_PAYLOAD $FILESYSTEM_SQUASHFS $FILESYSTEM_DOCKERFS
+pushd $FILESYSTEM_ROOT && sudo zip -9 $OLDPWD/$ONIE_INSTALLER_PAYLOAD -r boot/ $PLATFORM_DIR/; popd
+sudo zip -9 -g $ONIE_INSTALLER_PAYLOAD $FILESYSTEM_SQUASHFS $FILESYSTEM_DOCKERFS

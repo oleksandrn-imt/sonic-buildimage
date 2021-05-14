@@ -1,0 +1,70 @@
+
+onie_submenu="ONIE (Version: ${onie_version})"
+
+onie_menu_install="ONIE: Install OS"
+export onie_menu_install
+onie_menu_rescue="ONIE: Rescue"
+export onie_menu_rescue
+onie_menu_uninstall="ONIE: Uninstall OS"
+export onie_menu_uninstall
+onie_menu_update="ONIE: Update ONIE"
+export onie_menu_update
+onie_menu_embed="ONIE: Embed ONIE"
+export onie_menu_embed
+
+set fallback="${onie_menu_rescue}"
+
+function onie_entry_start {
+  insmod gzio
+  insmod ext2
+  if [ "${onie_partition_type}" = "gpt" ] ; then
+    insmod part_gpt
+    set root='(hd0,gpt2)'
+  else
+    insmod part_msdos
+    set root='(hd0,msdos1)'
+  fi
+  search --no-floppy --label --set=root ONIE-BOOT
+}
+
+function onie_entry_end {
+  echo "Version   : ${onie_version}"
+  echo "Build Date: ${onie_build_date}"
+}
+submenu ONIE {
+menuentry "${onie_menu_install}" {
+        onie_entry_start
+        echo    "ONIE: OS Install Mode ..."
+        linux   /onie/vmlinuz-${onie_kernel_version}-onie quiet console=tty0 connsole=ttyS0,115200n8 quiet nomodeset   boot_reason=install
+        initrd  /onie/initrd.img-${onie_kernel_version}-onie
+        onie_entry_end
+}
+menuentry "${onie_menu_rescue}" {
+        onie_entry_start
+        echo    "ONIE: Rescue Mode ..."
+        linux   /onie/vmlinuz-${onie_kernel_version}-onie quiet console=tty0 connsole=ttyS0,115200n8 quiet nomodeset   boot_reason=rescue
+        initrd  /onie/initrd.img-${onie_kernel_version}-onie
+        onie_entry_end
+}
+menuentry "${onie_menu_uninstall}" {
+        onie_entry_start
+        echo    "ONIE: OS Uninstall Mode ..."
+        linux   /onie/vmlinuz-${onie_kernel_version}-onie quiet console=tty0 connsole=ttyS0,115200n8 quiet nomodeset   boot_reason=uninstall
+        initrd  /onie/initrd.img-${onie_kernel_version}-onie
+        onie_entry_end
+}
+menuentry "${onie_menu_update}" {
+        onie_entry_start
+        echo    "ONIE: ONIE Update Mode ..."
+        linux   /onie/vmlinuz-${onie_kernel_version}-onie quiet console=tty0 connsole=ttyS0,115200n8 quiet nomodeset   boot_reason=update
+        initrd  /onie/initrd.img-${onie_kernel_version}-onie
+        onie_entry_end
+}
+menuentry "${onie_menu_embed}" {
+        onie_entry_start
+        echo    "ONIE: ONIE Embed Mode ..."
+        linux   /onie/vmlinuz-${onie_kernel_version}-onie quiet console=tty0 connsole=ttyS0,115200n8 quiet nomodeset   boot_reason=embed
+        initrd  /onie/initrd.img-${onie_kernel_version}-onie
+        onie_entry_end
+}
+}

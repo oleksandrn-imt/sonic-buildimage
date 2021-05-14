@@ -44,4 +44,12 @@ python-wheels/{{ whl }}{{' '}}
 
 ## Clean up
 RUN apt-get purge -y python-pip python-dev; apt-get clean -y; apt-get autoclean -y; apt-get autoremove -y
-RUN rm -rf /debs /python-wheels
+RUN rm -rf /debs                \
+           /python-wheels       \
+           ~/.cache             \
+           /usr/share/doc/*     \
+           /usr/share/locale/*  \
+           /usr/share/man/*     \
+           /var/lib/apt/lists/* \
+           /tmp/*               \
+           /var/cache/*
