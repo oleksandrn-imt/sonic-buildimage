@@ -275,7 +275,8 @@ sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y in
     locales                 \
     cgroup-tools            \
     ipmitool                \
-    ndisc6
+    ndisc6                  \
+    python-pip
 
 
 if [[ $CONFIGURED_ARCH == amd64 ]]; then
@@ -422,8 +423,9 @@ if [[ $CONFIGURED_ARCH == amd64 ]]; then
 fi
 
 ## docker-py is needed by Ansible docker module
-sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT easy_install pip
-sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install 'docker-py==1.6.0'
+sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install --upgrade 'pip<21'
+sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get purge -y python-pip
+sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install 'docker==4.3.1'
 ## Note: keep pip installed for maintainance purpose
 
 ## Get gcc and python dev pkgs
