@@ -1,3 +1,4 @@
+include $(PLATFORM_PATH)/platform-modules-imt.mk
 include $(PLATFORM_PATH)/platform-modules-arista.mk
 include $(PLATFORM_PATH)/platform-modules-bfn.mk
 include $(PLATFORM_PATH)/platform-modules-bfn-montara.mk
@@ -30,3 +31,5 @@ endif
 # Runtime dependency on sai is set only for syncd
 #$(SYNCD)_RDEPENDS += $(BFN_SAI) $(WNC_OSW1800_PLATFORM) $(BFN_INGRASYS_PLATFORM) $(BFN_PLATFORM)
 $(SYNCD)_RDEPENDS += $(BFN_SAI) $(BFN_INGRASYS_PLATFORM) $(BFN_PLATFORM)
+
+$(DOCKER_PLATFORM_MONITOR)_DEPENDS += $(PYTHON_THRIFT) $(IMT_FANCONTROL_CFG) $(IMT_SENSORS_CFG)

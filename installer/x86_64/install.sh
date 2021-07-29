@@ -145,7 +145,9 @@ if [ "$install_env" = "onie" ]; then
     # The onie bin tool prefix
     onie_bin=
     # The persistent ONIE directory location
-    onie_root_dir=/mnt/onie-boot/onie
+    #onie_root_dir=/mnt/onie-boot/onie
+    # TODO: Right location should be handled by our ONIE
+    onie_root_dir=/boot/onie
     # The onie file system root
     onie_initrd_tmp=/
 fi
@@ -578,7 +580,7 @@ else
 fi
 
 DEFAULT_GRUB_SERIAL_COMMAND="serial --port=${CONSOLE_PORT} --speed=${CONSOLE_SPEED} --word=8 --parity=no --stop=1"
-DEFAULT_GRUB_CMDLINE_LINUX="console=tty0 console=ttyS${CONSOLE_DEV},${CONSOLE_SPEED}n8 quiet $CSTATES"
+DEFAULT_GRUB_CMDLINE_LINUX="pnpacpi=off intel_iommu=on console=tty0 console=ttyS${CONSOLE_DEV},${CONSOLE_SPEED}n8 quiet $CSTATES"
 GRUB_SERIAL_COMMAND=${GRUB_SERIAL_COMMAND:-"$DEFAULT_GRUB_SERIAL_COMMAND"}
 GRUB_CMDLINE_LINUX=${GRUB_CMDLINE_LINUX:-"$DEFAULT_GRUB_CMDLINE_LINUX"}
 export GRUB_SERIAL_COMMAND

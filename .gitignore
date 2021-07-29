@@ -76,6 +76,18 @@ platform/broadcom/sonic-platform-modules-dell/z9100/modules/dell_mailbox.c
 platform/broadcom/sonic-platform-modules-dell/z9264f/sonic_platform/ipmihelper.py
 platform/cisco-8000
 
+# Barefoot platform build artifacts
+platform/barefoot/*modules*/debian/*platform*
+platform/barefoot/*modules*/debian/.debhelper
+platform/barefoot/*modules*/debian/files
+platform/barefoot/*modules*/debian/bfn-modules*
+platform/barefoot/*modules*/modules/*.ko*
+platform/barefoot/*modules*/modules/*.mod*
+platform/barefoot/*modules*/modules/*.o*
+platform/barefoot/*modules*/modules/Module*
+platform/barefoot/*modules*/modules/modules*
+platform/barefoot/*modules*/modules/.tmp_versions
+
 # buildinfo
 files/build/buildinfo
 files/build/tmp

@@ -1,5 +1,5 @@
-BFN_SAI = bfnsdk_20210423_sai_1.8.1_deb10.deb
-$(BFN_SAI)_URL = "https://github.com/barefootnetworks/sonic-release-pkgs/raw/dev/$(BFN_SAI)"
+BFN_SAI = bfnsdk_1.0.0_amd64.deb
+$(BFN_SAI)_URL = "https://github.com/InterfaceMasters/sonic-release-pkgs/raw/imt-bf-sde-9.6.0/sonic-barefoot-pkgs/$(BFN_SAI)"
 
 $(BFN_SAI)_DEPENDS += $(LIBNL_GENL3_DEV)
 $(eval $(call add_conflict_package,$(BFN_SAI),$(LIBSAIVS_DEV)))

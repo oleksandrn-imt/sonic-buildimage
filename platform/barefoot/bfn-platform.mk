@@ -1,5 +1,5 @@
-BFN_PLATFORM = bfnplatform_20210423_sai_1.8.1_deb10.deb
-$(BFN_PLATFORM)_URL = "https://github.com/barefootnetworks/sonic-release-pkgs/raw/dev/$(BFN_PLATFORM)"
+BFN_PLATFORM = bfnplatform_1.0.0_amd64.deb
+$(BFN_PLATFORM)_URL = "https://github.com/InterfaceMasters/sonic-release-pkgs/raw/imt-bf-sde-9.6.0/sonic-barefoot-pkgs/$(BFN_PLATFORM)"
 
 SONIC_ONLINE_DEBS += $(BFN_PLATFORM)
 $(BFN_SAI_DEV)_DEPENDS += $(BFN_PLATFORM)
