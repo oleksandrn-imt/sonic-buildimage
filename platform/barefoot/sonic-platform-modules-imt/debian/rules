@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+
+PLATFORM_NAME := x86_64-im_n29xx_t40n-r0
+PACKAGE_NAME := sonic-platform-modules-imt
+BUILD_DIR := $(shell pwd)/build
+WHEEL_BUILD_DIR := $(BUILD_DIR)/wheel
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	set -e
+	python3 setup.py bdist_wheel -d $(WHEEL_BUILD_DIR)
+	set +e
+
+override_dh_auto_install:
+	dh_installdirs -p$(PACKAGE_NAME) usr/share/sonic/device/$(PLATFORM_NAME)/
+	cp -r $(WHEEL_BUILD_DIR)/*  debian/$(PACKAGE_NAME)/usr/share/sonic/device/$(PLATFORM_NAME)/
+
+override_dh_usrlocal:
+
+override_dh_clean:
+	rm -fr $(WHEEL_BUILD_DIR)
+	rm -fr *.egg-info
+	rm -fr $(BUILD)
+	dh_clean

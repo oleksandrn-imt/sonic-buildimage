@@ -1,0 +1,11 @@
+Source: sonic-platform-modules-imt
+Section: main
+Priority: optional
+Maintainer: Support <support@interfacemasters.com>
+Build-Depends: debhelper (>= 9.0.0), bzip2
+Standards-Version: 1.0.0
+
+Package: sonic-platform-modules-imt
+Architecture: amd64
+Description: platform plugins such as fan, led, sfp
+
