@@ -15,6 +15,7 @@ include $(PLATFORM_PATH)/platform-modules-juniper.mk
 include $(PLATFORM_PATH)/platform-modules-brcm-xlr-gts.mk
 include $(PLATFORM_PATH)/platform-modules-ruijie.mk
 include $(PLATFORM_PATH)/platform-modules-ragile.mk
+include $(PLATFORM_PATH)/platform-modules-imt.mk
 include $(PLATFORM_PATH)/docker-syncd-brcm.mk
 include $(PLATFORM_PATH)/docker-syncd-brcm-rpc.mk
 include $(PLATFORM_PATH)/docker-saiserver-brcm.mk
@@ -43,3 +44,5 @@ $(SYNCD)_UNINSTALLS += $(BRCM_SAI_DEV) $(BRCM_SAI)
 ifeq ($(ENABLE_SYNCD_RPC),y)
 $(SYNCD)_DEPENDS += $(LIBSAITHRIFT_DEV)
 endif
+
+$(DOCKER_PLATFORM_MONITOR)_DEPENDS += $(PYTHON_THRIFT) $(IMT_FANCONTROL_CFG) $(IMT_SENSORS_CFG)

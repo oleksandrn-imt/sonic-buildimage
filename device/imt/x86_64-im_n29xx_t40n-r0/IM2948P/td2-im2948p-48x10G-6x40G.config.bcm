@@ -1,0 +1,145 @@
+os=unix
+bcm_stat_flags=0
+parity_enable=0
+parity_correction=0
+
+bcm_num_cos=8
+bcm_stat_jumbo=10000
+bcm_stat_interval=1000000
+l2_mem_entries=32768
+l3_mem_entries=16384
+l3_alpm_enable=2
+ipv6_lpm_128b_enable=1
+
+mmu_lossless=0
+lls_num_l2uc=12
+module_64ports=0
+
+rate_ext_mdio_divisor=96
+mdio_output_delay=15
+
+phy_aux_voltage_enable=1
+
+port_init_cl72=0
+phy_an_c73=5 # TSCMOD_CL73_CL37
+
+#sdk6.5.5 only supports 156(default) or 125
+#xgxs_lcpll_xtal_refclk=1
+tslam_dma_enable=1
+table_dma_enable=1
+
+pbmp_xport_xe.0=0x01fffffffffffffffffe
+pbmp_oversubscribe.0=0x01fffffffffffffffffffffffe
+
+# Board: IM2948P
+#
+
+#SFP+ 1-4
+portmap_1.0=9:10
+portmap_2.0=10:10
+portmap_3.0=11:10
+portmap_4.0=12:10
+
+#SFP+ 5-8
+portmap_5.0=13:10
+portmap_6.0=14:10
+portmap_7.0=15:10
+portmap_8.0=16:10
+
+#SFP+ 9-12
+portmap_9.0=17:10
+portmap_10.0=18:10
+portmap_11.0=19:10
+portmap_12.0=20:10
+
+#SFP+ 13-16
+portmap_13.0=21:10
+portmap_14.0=22:10
+portmap_15.0=23:10
+portmap_16.0=24:10
+
+#SFP+ 17-20
+portmap_17.0=25:10
+portmap_18.0=26:10
+portmap_19.0=27:10
+portmap_20.0=28:10
+
+#SFP+ 21-24
+portmap_21.0=29:10
+portmap_22.0=30:10
+portmap_23.0=31:10
+portmap_24.0=32:10
+
+#SFP+ 25-28
+portmap_25.0=33:10
+portmap_26.0=34:10
+portmap_27.0=35:10
+portmap_28.0=36:10
+
+#SFP+ 29-32
+portmap_29.0=37:10
+portmap_30.0=38:10
+portmap_31.0=39:10
+portmap_32.0=40:10
+
+#SFP+ 33-26
+portmap_33.0=41:10
+portmap_34.0=42:10
+portmap_35.0=43:10
+portmap_36.0=44:10
+
+#SFP+ 37-40
+portmap_37.0=45:10
+portmap_38.0=46:10
+portmap_39.0=47:10
+portmap_40.0=48:10
+
+#SFP+ 41-44
+portmap_41.0=49:10
+portmap_42.0=50:10
+portmap_43.0=51:10
+portmap_44.0=52:10
+
+#SFP+ 45-48
+portmap_45.0=53:10
+portmap_46.0=54:10
+portmap_47.0=55:10
+portmap_48.0=56:10
+
+#QSFP+ 49
+portmap_49.0=65:40
+portmap_50.0=66:10:i
+portmap_51.0=67:10:i
+portmap_52.0=68:10:i
+
+#QSFP+ 50
+portmap_53.0=69:40
+portmap_54.0=70:10:i
+portmap_55.0=71:10:i
+portmap_56.0=72:10:i
+
+#QSFP+ 51
+portmap_57.0=73:40
+portmap_58.0=74:10:i
+portmap_59.0=75:10:i
+portmap_60.0=76:10:i
+
+#QSFP+ 52
+portmap_61.0=77:40
+portmap_62.0=78:10:i
+portmap_63.0=79:10:i
+portmap_64.0=80:10:i
+
+#QSFP+ 53
+portmap_65.0=81:40
+portmap_66.0=82:10:i
+portmap_67.0=83:10:i
+portmap_68.0=84:10:i
+
+#QSFP+ 54
+portmap_69.0=85:40
+portmap_70.0=86:10:i
+portmap_71.0=87:10:i
+portmap_72.0=88:10:i
+#
+# End of IM2948P board

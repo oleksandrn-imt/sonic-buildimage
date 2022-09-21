@@ -35,7 +35,11 @@ generate_onie_installer_image()
             if [ -f ./device/$VENDOR/$PLATFORM/installer.conf ]; then
                 cp ./device/$VENDOR/$PLATFORM/installer.conf ./installer/x86_64/platforms/$PLATFORM
             fi
-
+            if [ $VENDOR == "imt" ]; then
+                if [ -f ./device/$VENDOR/$PLATFORM/${TARGET_MACHINE}_installer_conf/installer.conf ]; then
+                    cp ./device/$VENDOR/$PLATFORM/${TARGET_MACHINE}_installer_conf/installer.conf ./installer/x86_64/platforms/$PLATFORM
+                fi
+            fi
         done
     done
 
