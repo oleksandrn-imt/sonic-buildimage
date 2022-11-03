@@ -26,3 +26,12 @@ SONIC_ONLINE_DEBS += $(IMT_FANCONTROL_CFG)
 IMT_SENSORS_CFG = sensors-config_3.01_amd64.deb
 $(IMT_SENSORS_CFG)_URL = "https://github.com/InterfaceMasters/sonic-release-pkgs/raw/imt-bcm-sai-5.0.0.6/sonic-imt-boardkeeper-pkgs/$(IMT_SENSORS_CFG)"
 SONIC_ONLINE_DEBS += $(IMT_SENSORS_CFG)
+
+BCM_IMT_PLATFORM_MODULE_VERSION = 1.0
+
+export BCM_IMT_PLATFORM_MODULE_VERSION
+
+BCM_IMT_PLATFORM_MODULE = sonic-platform-modules-imt_$(BCM_IMT_PLATFORM_MODULE_VERSION)_amd64.deb
+$(BCM_IMT_PLATFORM_MODULE)_SRC_PATH = $(PLATFORM_PATH)/sonic-platform-modules-imt
+$(BCM_IMT_PLATFORM_MODULE)_PLATFORM = x86_64-im_n29xx_t40n-r0
+SONIC_DPKG_DEBS += $(BCM_IMT_PLATFORM_MODULE)

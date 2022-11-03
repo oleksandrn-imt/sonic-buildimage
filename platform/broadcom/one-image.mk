@@ -73,7 +73,8 @@ $(SONIC_ONE_IMAGE)_LAZY_INSTALLS += $(DELL_S6000_PLATFORM_MODULE) \
                                $(NOKIA_IXR7250_PLATFORM_MODULE) \
                                $(BCM_IMT_BK_MODULES) \
                                $(BCM_IMT_BK_UTILS) \
-                               $(BCM_IMT_BK_UTILS_CFG)
+                               $(BCM_IMT_BK_UTILS_CFG) \
+                               $(BCM_IMT_PLATFORM_MODULE)
 $(SONIC_ONE_IMAGE)_LAZY_BUILD_INSTALLS = $(BRCM_OPENNSL_KERNEL) $(BRCM_DNX_OPENNSL_KERNEL)
 ifeq ($(INSTALL_DEBUG_TOOLS),y)
 $(SONIC_ONE_IMAGE)_DOCKERS += $(SONIC_INSTALL_DOCKER_DBG_IMAGES)

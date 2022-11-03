@@ -85,6 +85,12 @@ if [ -e $SENSORS_CONF_PATH_GETTER ]; then
 fi
 {% endif %}
 
+# For IMT devices fancontrol config is generated on the device.
+if [ -e /etc/init.d/fan-control-config ]; then
+    service fan-control-config start
+    HAVE_FANCONTROL_CONF=1
+fi
+
 if [ -e $SENSORS_CONF_FILE ]; then
     HAVE_SENSORS_CONF=1
     mkdir -p /etc/sensors.d
