@@ -1,4 +1,4 @@
-{% from "dockers/dockerfile-macros.j2" import install_debian_packages, install_python3_wheels, copy_files %}
+{% from "dockers/dockerfile-macros.j2" import install_debian_packages, install_python3_wheels, copy_files, docker_image_cleanup %}
 FROM docker-config-engine-buster
 
 ARG docker_container_name
@@ -64,8 +64,10 @@ RUN apt-get -y purge     \
     apt-get clean -y        && \
     apt-get autoclean -y    && \
     apt-get autoremove -y --purge && \
-    find / | grep -E "__pycache__" | xargs rm -rf && \
-    rm -rf /debs /python-wheels ~/.cache
+    find / | grep -E "__pycache__" | xargs rm -rf
+
+# Clean up the docker image to decrease the image size
+{{ docker_image_cleanup() }}
 
 COPY ["start.sh", "/usr/bin/"]
 COPY ["snmp_yml_to_configdb.py", "/usr/bin/"]

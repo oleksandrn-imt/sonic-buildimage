@@ -1,4 +1,4 @@
-{% from "dockers/dockerfile-macros.j2" import install_debian_packages, install_python_wheels, copy_files %}
+{% from "dockers/dockerfile-macros.j2" import install_debian_packages, install_python_wheels, copy_files, docker_image_cleanup %}
 FROM docker-config-engine-buster
 
 ARG docker_container_name
@@ -19,8 +19,10 @@ RUN apt-get update
 
 RUN apt-get clean -y      && \
     apt-get autoclean -y  && \
-    apt-get autoremove -y && \
-    rm -rf /debs
+    apt-get autoremove -y
+
+# Clean up the docker image to decrease the image size
+{{ docker_image_cleanup() }}
 
 COPY ["start.sh", "/usr/bin/"]
 COPY ["supervisord.conf", "/etc/supervisor/conf.d/"]
