@@ -1,4 +1,4 @@
-{% from "dockers/dockerfile-macros.j2" import install_debian_packages, install_python_wheels, copy_files %}
+{% from "dockers/dockerfile-macros.j2" import install_debian_packages, install_python_wheels, copy_files, docker_image_cleanup %}
 FROM docker-base-buster
 
 ## Make apt-get non-interactive
@@ -48,5 +48,7 @@ RUN apt-get purge -y               \
         build-essential         && \
     apt-get clean -y            && \
     apt-get autoclean -y        && \
-    apt-get autoremove -y       && \
-    rm -rf /debs /python-wheels
+    apt-get autoremove -y
+
+# Clean up the docker image to decrease the image size
+{{ docker_image_cleanup() }}

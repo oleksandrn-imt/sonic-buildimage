@@ -1,3 +1,4 @@
+{% from "dockers/dockerfile-macros.j2" import docker_image_cleanup %}
 FROM docker-config-engine-buster
 
 ARG docker_container_name
@@ -34,6 +35,8 @@ COPY ["supervisord.conf", "/etc/supervisor/conf.d/"]
 
 RUN apt-get remove -y g++ python3-dev
 RUN apt-get clean -y; apt-get autoclean -y; apt-get autoremove -y
-RUN rm -rf /debs
+
+# Clean up the docker image to decrease the image size
+{{ docker_image_cleanup() }}
 
 ENTRYPOINT ["/usr/local/bin/supervisord"]

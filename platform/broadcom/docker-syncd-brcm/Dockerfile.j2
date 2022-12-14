@@ -1,4 +1,4 @@
-{% from "dockers/dockerfile-macros.j2" import install_debian_packages %}
+{% from "dockers/dockerfile-macros.j2" import install_debian_packages, docker_image_cleanup %}
 FROM docker-config-engine-buster
 
 ARG docker_container_name
@@ -34,6 +34,8 @@ COPY ["critical_processes", "/etc/supervisor/"]
 
 ## Clean up
 RUN apt-get clean -y; apt-get autoclean -y; apt-get autoremove -y
-RUN rm -rf /debs
+
+# Clean up the docker image to decrease the image size
+{{ docker_image_cleanup() }}
 
 ENTRYPOINT ["/usr/local/bin/supervisord"]

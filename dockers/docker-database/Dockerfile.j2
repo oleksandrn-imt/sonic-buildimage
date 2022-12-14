@@ -1,4 +1,4 @@
-{% from "dockers/dockerfile-macros.j2" import install_debian_packages, install_python_wheels, copy_files %}
+{% from "dockers/dockerfile-macros.j2" import install_debian_packages, install_python_wheels, copy_files, docker_image_cleanup %}
 FROM docker-config-engine-buster
 
 ARG docker_container_name
@@ -40,7 +40,6 @@ RUN rm redis-tools_6.0.6-1~bpo10+1_amd64.deb redis-server_6.0.6-1~bpo10+1_amd64.
 RUN apt-get clean -y                                  && \
     apt-get autoclean -y                              && \
     apt-get autoremove -y                             && \
-    rm -rf /debs ~/.cache                             && \
     sed -ri 's/^(save .*$)/# \1/g;                       \
              s/^daemonize yes$/daemonize no/;            \
              s/^logfile .*$/logfile ""/;                 \
@@ -49,6 +48,9 @@ RUN apt-get clean -y                                  && \
              s/redis-server.sock/redis.sock/g;           \
              s/^client-output-buffer-limit pubsub [0-9]+mb [0-9]+mb [0-9]+/client-output-buffer-limit pubsub 0 0 0/ \
             ' /etc/redis/redis.conf
+
+# Clean up the docker image to decrease the image size
+{{ docker_image_cleanup() }}
 
 COPY ["supervisord.conf.j2", "/usr/share/sonic/templates/"]
 COPY ["docker-database-init.sh", "/usr/local/bin/"]

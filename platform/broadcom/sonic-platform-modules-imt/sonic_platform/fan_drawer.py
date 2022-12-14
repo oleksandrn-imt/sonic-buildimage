@@ -76,7 +76,7 @@ def fan_drawer_list_get():
         fan_draw_list.append(FanDrawer(0, 0, hwmon_path))
     else:
         for n in range(2):
-            module_path = '/sys/devices/board/ext00%d/' % n
+            module_path = '/sys/devices/board/ext00{}/'.format(n)
             if os.path.exists(module_path):
                 hwmon_path = glob.glob(os.path.join(module_path, 'i2c-fan*/hwmon/hwmon*/'))[0]
                 fan_draw_list.append(FanDrawer(n, module_path, hwmon_path))

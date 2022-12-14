@@ -1,5 +1,5 @@
 {% set prefix = DEFAULT_CONTAINER_REGISTRY %}
-{% from "dockers/dockerfile-macros.j2" import install_debian_packages, install_python_wheels, copy_files %}
+{% from "dockers/dockerfile-macros.j2" import install_debian_packages, install_python_wheels, copy_files, docker_image_cleanup %}
 {% if CONFIGURED_ARCH == "armhf" and MULTIARCH_QEMU_ENVIRON == "y" %}
 FROM {{ prefix }}multiarch/debian-debootstrap:armhf-buster
 {% elif CONFIGURED_ARCH == "arm64" and MULTIARCH_QEMU_ENVIRON == "y" %}
@@ -120,8 +120,10 @@ RUN apt-get -y purge   \
 # Remove /var/lib/apt/lists/*, could be obsoleted for derived images
 RUN apt-get clean -y                     && \
     apt-get autoclean -y                 && \
-    apt-get autoremove -y                && \
-    rm -rf /var/lib/apt/lists/* /tmp/*
+    apt-get autoremove -y
+
+# Clean up the docker image to decrease the image size
+{{ docker_image_cleanup() }}
 
 COPY ["etc/rsyslog.conf", "/etc/rsyslog.conf"]
 COPY ["etc/rsyslog.d/*", "/etc/rsyslog.d/"]
